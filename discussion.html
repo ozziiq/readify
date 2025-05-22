@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify - Book Discussion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-light: #A29BFE;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --gray: #636E72;
+            --success: #00B894;
+            --warning: #FDCB6E;
+            --danger: #E17055;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            background-color: #1E1E1E;
+            color: #F5F6FA;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        /* Header Styles */
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        nav ul li a i {
+            font-size: 20px;
+        }
+
+        .current-book {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: rgba(108, 92, 231, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .current-book img {
+            width: 40px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .current-book-info {
+            font-size: 14px;
+        }
+
+        .current-book-title {
+            font-weight: 600;
+        }
+
+        /* Book Context Section */
+        .book-context {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 25px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .dark-mode .book-context {
+            background-color: #2D3436;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .book-cover {
+            width: 120px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .book-info {
+            flex: 1;
+        }
+
+        .book-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .book-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .book-genre {
+            background-color: var(--primary-light);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .book-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .book-status.completed {
+            color: var(--success);
+        }
+
+        .book-status.in-progress {
+            color: var(--warning);
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Discussion Area */
+        .discussion-area {
+            grid-column: 1;
+        }
+
+        .comment-form {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .dark-mode .comment-form {
+            background-color: #2D3436;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .comment-form-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comment-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .dark-mode .comment-input {
+            background-color: #3D4548;
+            border-color: #555;
+            color: white;
+        }
+
+        .comment-submit {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comment-submit:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .dark-mode .comments-section {
+            background-color: #2D3436;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .comments-title {
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sort-label {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .sort-select {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+
+        .dark-mode .sort-select {
+            background-color: #3D4548;
+            border-color: #555;
+            color: white;
+        }
+
+        /* Comment Card */
+        .comment {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #F9F9F9;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .comment {
+            background-color: #3D4548;
+        }
+
+        .comment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .comment-content {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .comment-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .comment-tag {
+            background-color: var(--primary-light);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comment-tag:hover {
+            background-color: var(--primary);
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .comment-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comment-action:hover {
+            color: var(--primary);
+        }
+
+        .comment-action.liked {
+            color: var(--danger);
+        }
+
+        /* Replies */
+        .replies {
+            margin-left: 30px;
+            margin-top: 15px;
+            padding-left: 20px;
+            border-left: 2px solid #eee;
+        }
+
+        .dark-mode .replies {
+            border-left-color: #444;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            grid-column: 2;
+        }
+
+        .sidebar-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .dark-mode .sidebar-section {
+            background-color: #2D3436;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .top-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .top-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .top-user-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .top-user-comments {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .similar-book {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .similar-book:hover {
+            transform: translateX(5px);
+        }
+
+        .similar-book-cover {
+            width: 50px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .similar-book-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .similar-book-author {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .read-again {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .listen-again {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Footer */
+        footer {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 12px;
+        }
+
+        .dark-mode .footer-nav-item {
+            color: #F5F6FA;
+        }
+
+        .footer-nav-item i {
+            font-size: 18px;
+        }
+
+        .save-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--success);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                grid-column: 1;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .book-context {
+                flex-direction: column;
+            }
+
+            .book-cover {
+                align-self: center;
+            }
+
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav ul {
+                gap: 15px;
+            }
+
+            .comment-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .comment-user {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .replies {
+                margin-left: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="assets/images/logo-readify.png" alt="Readify Logo">
+                <h1>Readify</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="home.html">
+                            <i class="fas fa-book"></i>
+                            <span>Library</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="current-book">
+                <img src="assets/images/bookcover-mariposa.jpg" alt="Book Cover">
+                <div class="current-book-info">
+                    <div class="current-book-title">Mariposa</div>
+                    <div class="current-book-author">Luluk HF</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Book Context Section -->
+        <section class="book-context">
+            <img src="assets/images/bookcover-mariposa.jpg" alt="Book Cover" class="book-cover">
+            <div class="book-info">
+                <h2 class="book-title">Mariposa</h2>
+                <div class="book-meta">
+                    <span class="book-genre">Romance</span>
+                    <span class="book-status completed">
+                        <i class="fas fa-check-circle"></i>
+                        Finished Reading
+                    </span>
+                </div>
+                <p class="book-description">
+                    Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived.
+                </p>
+                <div class="discussion-stats">
+                    <span><strong>142</strong> comments</span>
+                    <span> · </span>
+                    <span><strong>24</strong> readers discussing</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Discussion Area -->
+        <main class="discussion-area">
+            <div class="comment-form">
+                <h3 class="comment-form-title">
+                    <i class="fas fa-comment-dots"></i>
+                    Join the Discussion
+                </h3>
+                <textarea class="comment-input" placeholder="Write your thoughts or discussion points here..."></textarea>
+                <button class="comment-submit">
+                    <i class="fas fa-paper-plane"></i>
+                    Post Comment
+                </button>
+            </div>
+
+            <div class="comments-section">
+                <div class="comments-header">
+                    <h3 class="comments-title">
+                        <i class="fas fa-comments"></i>
+                        Community Discussion
+                    </h3>
+                    <div class="sort-options">
+                        <span class="sort-label">Sort by:</span>
+                        <select class="sort-select">
+                            <option value="newest">Newest First</option>
+                            <option value="top">Top Comments</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Comment 1 -->
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <img src="assets/images/aqilah2.jpg" alt="User Avatar" class="user-avatar">
+                            <span class="user-name">Aqilah Siregar</span>
+                        </div>
+                        <span class="comment-time">2 hours ago</span>
+                    </div>
+                    <div class="comment-content">
+                        I was completely blown away by the concept of the Midnight Library. The idea that we get to see all our possible lives is both terrifying and comforting at the same time. What did everyone think about Nora's final choice?
+                    </div>
+                    <div class="comment-tags">
+                        <span class="comment-tag">Concept</span>
+                        <span class="comment-tag">Ending</span>
+                        <span class="comment-tag">Philosophy</span>
+                    </div>
+                    <div class="comment-actions">
+                        <div class="comment-action like-action">
+                            <i class="fas fa-heart"></i>
+                            <span>9999+</span>
+                        </div>
+                        <div class="comment-action reply-action">
+                            <i class="fas fa-reply"></i>
+                            <span>Reply</span>
+                        </div>
+                        <div class="comment-action report-action">
+                            <i class="fas fa-flag"></i>
+                            <span>Report</span>
+                        </div>
+                    </div>
+
+                    <!-- Replies -->
+                    <div class="replies">
+                        <!-- Reply 1 -->
+                        <div class="comment">
+                            <div class="comment-header">
+                                <div class="comment-user">
+                                    <img src="assets/images/farhan.jpg" alt="User Avatar" class="user-avatar">
+                                    <span class="user-name">Farhan</span>
+                                </div>
+                                <span class="comment-time">1 hour ago</span>
+                            </div>
+                            <div class="comment-content">
+                                @Siregar I agree! I think her final choice showed real growth. She moved from regret to acceptance, which was the whole point of her journey through the library.
+                            </div>
+                            <div class="comment-tags">
+                                <span class="comment-tag">Character Growth</span>
+                            </div>
+                            <div class="comment-actions">
+                                <div class="comment-action like-action liked">
+                                    <i class="fas fa-heart"></i>
+                                    <span>8</span>
+                                </div>
+                                <div class="comment-action reply-action">
+                                    <i class="fas fa-reply"></i>
+                                    <span>Reply</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reply 2 -->
+                        <div class="comment">
+                            <div class="comment-header">
+                                <div class="comment-user">
+                                    <img src="assets/images/haura.jpg" alt="User Avatar" class="user-avatar">
+                                    <span class="user-name">Hauhauran</span>
+                                </div>
+                                <span class="comment-time">45 minutes ago</span>
+                            </div>
+                            <div class="comment-content">
+                                @Siregar I actually found the ending a bit predictable, but still satisfying. Did anyone else feel like some of the alternate lives were more interesting than her "real" life?
+                            </div>
+                            <div class="comment-tags">
+                                <span class="comment-tag">Ending</span>
+                                <span class="comment-tag">Alternate Lives</span>
+                            </div>
+                            <div class="comment-actions">
+                                <div class="comment-action like-action">
+                                    <i class="fas fa-heart"></i>
+                                    <span>5</span>
+                                </div>
+                                <div class="comment-action reply-action">
+                                    <i class="fas fa-reply"></i>
+                                    <span>Reply</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment 2 -->
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <img src="assets/images/haura2.jpg" alt="User Avatar" class="user-avatar">
+                            <span class="user-name">Salsabila Haura/span>
+                        </div>
+                        <span class="comment-time">5 hours ago</span>
+                    </div>
+                    <div class="comment-content">
+                        The Olympic swimmer life chapter hit me hard. As someone who gave up competitive swimming in college, I felt Nora's regret so deeply. The writing in that section was particularly vivid.
+                    </div>
+                    <div class="comment-tags">
+                        <span class="comment-tag">Emotional Impact</span>
+                        <span class="comment-tag">Memorable Scenes</span>
+                    </div>
+                    <div class="comment-actions">
+                        <div class="comment-action like-action">
+                            <i class="fas fa-heart"></i>
+                            <span>9999+</span>
+                        </div>
+                        <div class="comment-action reply-action">
+                            <i class="fas fa-reply"></i>
+                            <span>Reply</span>
+                        </div>
+                        <div class="comment-action report-action">
+                            <i class="fas fa-flag"></i>
+                            <span>Report</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment 3 -->
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <img src="assets/images/farhan.jpg" alt="User Avatar" class="user-avatar">
+                            <span class="user-name">Farhan Ar-Raziq</span>
+                        </div>
+                        <span class="comment-time">1 day ago</span>
+                    </div>
+                    <div class="comment-content">
+                        I listened to the audiobook version and the narrator's voice for Mrs. Elm was perfect! So warm and wise. Highly recommend the audio version if you haven't tried it.
+                    </div>
+                    <div class="comment-tags">
+                        <span class="comment-tag">Audiobook</span>
+                        <span class="comment-tag">Characters</span>
+                    </div>
+                    <div class="comment-actions">
+                        <div class="comment-action like-action liked">
+                            <i class="fas fa-heart"></i>
+                            <span>9999+</span>
+                        </div>
+                        <div class="comment-action reply-action">
+                            <i class="fas fa-reply"></i>
+                            <span>Reply</span>
+                        </div>
+                        <div class="comment-action report-action">
+                            <i class="fas fa-flag"></i>
+                            <span>Report</span>
+                        </div>
+                    </div>
+
+                    <!-- Replies -->
+                    <div class="replies">
+                        <!-- Reply 1 -->
+                        <div class="comment">
+                            <div class="comment-header">
+                                <div class="comment-user">
+                                    <img src="assets/images/aqilah.jpg" alt="User Avatar" class="user-avatar">
+                                    <span class="user-name">Rosmira Fams</span>
+                                </div>
+                                <span class="comment-time">20 hours ago</span>
+                            </div>
+                            <div class="comment-content">
+                                @Farhan I completely agree! The narrator captured the magical quality of the library so well. The scene where Nora first arrives gave me chills in the audio version.
+                            </div>
+                            <div class="comment-tags">
+                                <span class="comment-tag">Narration</span>
+                            </div>
+                            <div class="comment-actions">
+                                <div class="comment-action like-action">
+                                    <i class="fas fa-heart"></i>
+                                    <span>12</span>
+                                </div>
+                                <div class="comment-action reply-action">
+                                    <i class="fas fa-reply"></i>
+                                    <span>Reply</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Discussion Stats
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">142</div>
+                        <div class="stat-label">Comments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24</div>
+                        <div class="stat-label">Participants</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">9999+</div>
+                        <div class="stat-label">Likes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Topics</div>
+                    </div>
+                </div>
+                <h4 class="sidebar-title">
+                    <i class="fas fa-crown"></i>
+                    Top Contributor
+                </h4>
+                <div class="top-user">
+                    <img src="assets/images/aqilah.jpg" alt="User Avatar" class="top-user-avatar">
+                    <div>
+                        <div class="top-user-name">Rosmira Fams</div>
+                        <div class="top-user-comments">12 comments · 56 likes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-tags"></i>
+                    Popular Topics
+                </h3>
+                <div class="comment-tags" style="margin-top: 10px;">
+                    <span class="comment-tag">Ending</span>
+                    <span class="comment-tag">Characters</span>
+                    <span class="comment-tag">Philosophy</span>
+                    <span class="comment-tag">Audiobook</span>
+                    <span class="comment-tag">Emotional Impact</span>
+                    <span class="comment-tag">Alternate Lives</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-book-open"></i>
+                    Similar Books
+                </h3>
+                <div class="similar-book">
+                    <img src="assets/images/home/Dune-Cover-1.jpg" alt="Book Cover" class="similar-book-cover">
+                    <div>
+                        <div class="similar-book-title">Dune Cover</div>
+                        <div class="similar-book-author">Farhan Ar-Raziq</div>
+                    </div>
+                </div>
+                <div class="similar-book">
+                    <img src="assets/images/home/Echoes of the Past.jpg" alt="Book Cover" class="similar-book-cover">
+                    <div>
+                        <div class="similar-book-title">Echoes of the Past</div>
+                        <div class="similar-book-author">Aqilah Nahdah Muthiah</div>
+                    </div>
+                </div>
+                <div class="similar-book">
+                    <img src="assets/images/home/The Summer House.jpeg" alt="Book Cover" class="similar-book-cover">
+                    <div>
+                        <div class="similar-book-title">The Summer House</div>
+                        <div class="similar-book-author">Salsabila Haura Z</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-redo"></i>
+                    Quick Actions
+                </h3>
+                <div class="action-buttons">
+                    <a href="reading.html" <button class="action-button read-again">
+                        <i class="fas fa-book"></i>
+                        Read Again
+                    </button></a>
+                    <button class="action-button listen-again">
+                        <a href="audiobook.html" <i class="fas fa-headphones"></i>
+                        Listen Again
+                    </button></a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-nav">
+                <a href="index.html" class="footer-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="home.html" class="footer-nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Library</span>
+                </a>
+                <a href="settings.html" class="footer-nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="settings.html" class="footer-nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+            <div class="save-status">
+                <i class="fas fa-check-circle"></i>
+                Your comment has been saved
+            </div>
+            <button class="cta-button">
+                Join Other Book Discussions
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        // Theme detection (would come from personalization settings)
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Like button functionality
+        const likeButtons = document.querySelectorAll('.like-action');
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle('liked');
+                const likeCount = this.querySelector('span');
+                if (this.classList.contains('liked')) {
+                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                } else {
+                    likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                }
+            });
+        });
+
+        // Reply button functionality
+        const replyButtons = document.querySelectorAll('.reply-action');
+        replyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const commentCard = this.closest('.comment');
+                const replyForm = document.createElement('div');
+                replyForm.className = 'reply-form';
+                replyForm.innerHTML = `
+                    <textarea class="comment-input" placeholder="Write your reply..." style="margin-top: 10px; min-height: 80px;"></textarea>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="comment-submit" style="padding: 8px 15px;">
+                            <i class="fas fa-paper-plane"></i>
+                            Post Reply
+                        </button>
+                        <button class="cancel-reply" style="background: none; border: none; color: var(--gray); cursor: pointer;">
+                            Cancel
+                        </button>
+                    </div>
+                `;
+                
+                // Insert the reply form
+                const repliesSection = commentCard.querySelector('.replies') || commentCard.appendChild(document.createElement('div'));
+                repliesSection.className = 'replies';
+                repliesSection.appendChild(replyForm);
+                
+                // Focus the textarea
+                replyForm.querySelector('textarea').focus();
+                
+                // Cancel button
+                replyForm.querySelector('.cancel-reply').addEventListener('click', function() {
+                    replyForm.remove();
+                });
+            });
+        });
+
+        // Sort functionality
+        const sortSelect = document.querySelector('.sort-select');
+        sortSelect.addEventListener('change', function() {
+            alert(`Sorting comments by: ${this.value}`);
+            // In a real app, this would reorder the comments
+        });
+
+        // Quick action buttons
+        document.querySelector('.read-again').addEventListener('click', function() {
+            alert('Opening reading page for this book...');
+        });
+
+        document.querySelector('.listen-again').addEventListener('click', function() {
+            alert('Opening audiobook player for this book...');
+        });
+
+        // Join discussions CTA
+        document.querySelector('.cta-button').addEventListener('click', function() {
+            alert('Navigating to book explorer to find more discussions...');
+        });
+    </script>
+</body>
+</html>

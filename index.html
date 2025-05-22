@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readify - Baca & Dengarkan Buku dengan Emosi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="assets/images/logo-readify.jpg" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a0dad;
+            --primary-dark: #4b0082;
+            --accent: #00f5ff;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: white;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.05) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: var(--primary-dark);
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+        
+        .cta-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .role-selector {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .role-btn {
+            padding: 10px 20px;
+            background-color: white;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .role-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 100;
+            display: none;
+            width: 200px;
+        }
+        
+        .role-dropdown a {
+            display: block;
+            padding: 10px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .role-dropdown a:hover {
+            background-color: #f8f9fa;
+            color: var(--primary);
+        }
+        
+        .role-selector:hover .role-dropdown {
+            display: block;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 60px;
+            color: var(--primary-dark);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(106, 13, 173, 0.1);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(106, 13, 173, 0.1);
+            border-radius: 50%;
+        }
+        
+        .feature-icon img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        
+        .feature-desc {
+            color: var(--gray);
+            font-size: 16px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+        
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 50px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-logo img {
+            height: 30px;
+            margin-right: 10px;
+        }
+        
+        .footer-about p {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        .footer-links h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                margin-bottom: 40px;
+            }
+            
+            .hero p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .cta-container {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .auth-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 150px 0 80px;
+            }
+            
+            h1 {
+                font-size: 30px;
+            }
+            
+            .btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                margin: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="home.html" class="logo">
+                <img src="assets/images/logo-readify.png" alt="(logo)">
+                Readify
+            </a>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" id="loginBtn">Login</button>
+                <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                <button id="darkModeToggle" title="Dark Mode" style="padding: 6px 10px; border-radius: 20px; background: var(--dark); color: white; border: none; cursor: pointer; font-size: 14px;">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Seperti Hidup di dalam Bacaan!</h1>
+                    <p>Temukan pengalaman membaca yang lebih dalam dengan audiobook personal dan rekomendasi buku yang sesuai dengan mood-mu.</p>
+                    <div class="cta-container">
+                        <a href="#" id="startNowBtn" class="btn btn-accent">Mulai Sekarang</a>
+                        <div class="role-selector">
+                            <button class="role-btn">
+                                Pilih Peran
+                                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 1.5L6 6.5L11 1.5" stroke="#6a0dad" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="role-dropdown">
+                                <a href="#">Reader</a>
+                                <a href="#">Writer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/images/index/orang-baca-buku2.jpg" alt="Person reading book with headphones">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Keunggulan Readify</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="assets/images/index/audiobook-personal.png" alt="Audiobook Icon">
+                    </div>
+                    <h3 class="feature-title">Audiobook Personal</h3>
+                    <p class="feature-desc">Dengarkan buku dengan suara yang sesuai preferensimu, pilih narator favorit atau bahkan rekam suaramu sendiri.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="assets/images/index/mood.png" alt="Mood Icon">
+                    </div>
+                    <h3 class="feature-title">Genre Sesuai Mood</h3>
+                    <p class="feature-desc">Sistem kami akan merekomendasikan buku berdasarkan mood dan preferensi membacamu saat ini.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="assets/images/index/discussion.png" alt="Discussion Icon">
+                    </div>
+                    <h3 class="feature-title">Diskusi Seru setelah Membaca</h3>
+                    <p class="feature-desc">Bergabung dengan komunitas pembaca untuk berdiskusi tentang buku yang baru saja kamu baca atau dengar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="assets/images/index/ai.png" alt="Discussion Icon">
+                    </div>
+                    <h3 class="feature-title">AI Personalized</h3>
+                    <p class="feature-desc">Segala kesukaan kamu dapat diketahui dan kami akan menampilkan yang terbaik untukmu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="modal-title">Login ke Readify</h2>
+            <div id="loginAlert" class="alert" style="display: none;"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+            <div class="form-footer">
+                Belum punya akun? <a href="#" id="switchToSignup">Daftar sekarang</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="modal-title">Buat Akun Readify</h2>
+            <div id="signupAlert" class="alert" style="display: none;"></div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Nama Lengkap</label>
+                    <input type="text" id="signupName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupRole">Saya ingin bergabung sebagai</label>
+                    <select id="signupRole" class="form-control" required>
+                        <option value="">Pilih peran</option>
+                        <option value="reader">Reader</option>
+                        <option value="writer">Writer</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Daftar Sekarang</button>
+            </form>
+            <div class="form-footer">
+                Sudah punya akun? <a href="#" id="switchToLogin">Login disini</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="assets/images/logo-readify.png" alt="Readify Logo">
+                        Readify
+                    </div>
+                    <p>Platform membaca dan mendengarkan buku dengan pengalaman penuh emosi untuk pembaca dan penulis.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Perusahaan</h3>
+                    <ul>
+                        <li><a href="#">Tentang Kami</a></li>
+                        <li><a href="#">Karir</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Partner</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Bantuan</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Kebijakan Privasi</a></li>
+                        <li><a href="#">Syarat & Ketentuan</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Untuk Penulis</h3>
+                    <ul>
+                        <li><a href="#">Publikasikan Karyamu</a></li>
+                        <li><a href="#">Program Penulis</a></li>
+                        <li><a href="#">Sumber Daya</a></li>
+                        <li><a href="#">Komunitas</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Readify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <!-- JavaScript -->
+    <script>
+    const startNowBtn = document.getElementById('startNowBtn');
+    startNowBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    loginModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    });
+            const darkModeToggle = document.getElementById('darkModeToggle');
+
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+
+                // Ganti ikon tombol 🌙/☀️
+                if (document.body.classList.contains('dark-mode')) {
+                    darkModeToggle.textContent = '☀️';
+                } else {
+                    darkModeToggle.textContent = '🌙';
+                }
+            });
+        // Modal functionality
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginModal = document.getElementById('loginModal');
+        const signupModal = document.getElementById('signupModal');
+        const closeBtns = document.querySelectorAll('.close-btn');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToSignup = document.getElementById('switchToSignup');
+        
+        // Show login modal
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Show signup modal
+        signupBtn.addEventListener('click', () => {
+            signupModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close modals
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                signupModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        });
+        
+        // Switch between login and signup
+        switchToSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            signupModal.style.display = 'flex';
+        });
+        
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (e.target === signupModal) {
+                signupModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Form submission with validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const alertBox = document.getElementById('loginAlert');
+            
+            // Simple validation
+            if (!email || !password) {
+                alertBox.textContent = 'Email dan password harus diisi';
+                alertBox.className = 'alert alert-error';
+                alertBox.style.display = 'block';
+                return;
+            }
+            
+            // Simulate successful login
+            alertBox.textContent = 'Login berhasil! Mengarahkan...';
+            alertBox.className = 'alert alert-success';
+            alertBox.style.display = 'block';
+            
+            // In a real app, you would handle the login process here
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                alertBox.style.display = 'none';
+                window.location.href = 'data-input.html';
+            }, 1500);
+        });
+        
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const role = document.getElementById('signupRole').value;
+            const alertBox = document.getElementById('signupAlert');
+            
+            // Simple validation
+            if (!name || !email || !password || !role) {
+                alertBox.textContent = 'Semua field harus diisi';
+                alertBox.className = 'alert alert-error';
+                alertBox.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 6) {
+                alertBox.textContent = 'Password harus minimal 6 karakter';
+                alertBox.className = 'alert alert-error';
+                alertBox.style.display = 'block';
+                return;
+            }
+            
+            // Simulate successful signup
+            alertBox.textContent = 'Pendaftaran berhasil! Silakan login.';
+            alertBox.className = 'alert alert-success';
+            alertBox.style.display = 'block';
+
+            // In a real app, you would handle the signup process here
+            setTimeout(() => {
+                signupModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                alertBox.style.display = 'none';
+                // Show login modal or redirect
+                loginModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

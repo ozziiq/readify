@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading: Dune: Messiah - Readify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Default theme (will be dynamically changed by JS) */
+            --primary: #6a0dad;
+            --primary-dark: #4b0082;
+            --accent: #00f5ff;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --text-light: #6c757d;
+            --header-bg: #ffffff;
+            --highlight-color: rgba(255, 255, 0, 0.3);
+            --reading-bg: #f8f9fa;
+            --progress-color: #6a0dad;
+            --ambient-overlay: rgba(106, 13, 173, 0.03);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Merriweather', serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--reading-bg);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Ambient Effect */
+        .ambient-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background: var(--ambient-overlay);
+            z-index: -1;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link i {
+            font-size: 20px;
+        }
+        
+        .profile-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Book Header */
+        .book-header {
+            position: sticky;
+            top: 70px;
+            background-color: var(--reading-bg);
+            padding: 20px 0;
+            z-index: 900;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .book-title {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 5px;
+        }
+        
+        .book-author {
+            font-size: 16px;
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--progress-color);
+            width: 35%; /* Dynamic value */
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 14px;
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Content Area */
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 0 100px;
+        }
+        
+        .chapter-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 40px 0 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .book-content {
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        .book-content p {
+            margin-bottom: 24px;
+        }
+        
+        /* Highlight Toolbar */
+        .highlight-toolbar {
+            position: fixed;
+            display: none;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 8px;
+            z-index: 1100;
+        }
+        
+        .highlight-btn {
+            background: none;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .highlight-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .highlight-btn i {
+            font-size: 18px;
+            color: var(--primary);
+        }
+        
+        .highlight-confirmation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Pomodoro Timer */
+        .pomodoro-container {
+            position: fixed;
+            bottom: 20px;
+            right: 100px;
+            background-color: black;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            z-index: 1000;
+            width: 250px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .pomodoro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .pomodoro-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .pomodoro-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .pomodoro-timer {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .pomodoro-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .pomodoro-btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pomodoro-start {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .pomodoro-start:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .pomodoro-reset {
+            background-color: #f0f0f0;
+            color: var(--primary-dark);
+        }
+        
+        .pomodoro-reset:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .pomodoro-presets {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .pomodoro-preset {
+            background: beige;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .pomodoro-preset.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Audio Player */
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .audio-player:hover {
+            transform: scale(1.1);
+        }
+        
+        .audio-player i {
+            font-size: 24px;
+        }
+        
+        .volume-control {
+            position: fixed;
+            bottom: 90px;
+            right: 35px;
+            width: 30px;
+            height: 120px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+        }
+        
+        .audio-player:hover .volume-control {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+        
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 6px;
+            transform: rotate(-90deg);
+            background: #e0e0e0;
+            outline: none;
+            border-radius: 3px;
+            margin: 40px 0;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* Quick Navigation */
+        .quick-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--header-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 900;
+        }
+        
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            color: var(--primary);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .content-container {
+                padding: 20px 0 80px;
+            }
+            
+            .book-content {
+                font-size: 16px;
+            }
+            
+            .pomodoro-container {
+                right: 20px;
+                bottom: 90px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-link span {
+                display: none;
+            }
+            
+            .book-header {
+                top: 60px;
+                padding: 15px 0;
+            }
+            
+            .book-title {
+                font-size: 20px;
+            }
+            
+            .book-author {
+                font-size: 14px;
+            }
+            
+            .chapter-title {
+                font-size: 20px;
+                margin: 30px 0 15px;
+            }
+            
+            .book-content p {
+                margin-bottom: 20px;
+            }
+            
+            .pomodoro-container {
+                width: 220px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .book-header {
+                top: 110px;
+            }
+            
+            .content-container {
+                padding-top: 10px;
+            }
+            
+            .book-content {
+                font-size: 15px;
+                line-height: 1.7;
+            }
+            
+            .pomodoro-container {
+                width: calc(100% - 40px);
+                right: 20px;
+                bottom: 80px;
+            }
+            
+            .quick-nav {
+                padding: 10px 0;
+            }
+            
+            .nav-btn {
+                font-size: 10px;
+            }
+            
+            .nav-btn i {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient Effect -->
+    <div class="ambient-effect"></div>
+    <audio id="backgroundAudio" loop>
+    <source src="assets/audio/ambient.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+    </audio>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo-readify.png" alt="Simplify Logo">
+                Simplify
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="home.html" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>Library</span>
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Personalization</span>
+                </a>
+                <a href="settings.html" class="profile-link">F</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Book Header -->
+    <div class="book-header">
+        <div class="container">
+            <h1 class="book-title">Mariposa</h1>
+            <p class="book-author">Luluk HF</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span>Chapter 5 of 12</span>
+                    <span>35% selesai</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="container content-container">
+        <h2 class="chapter-title">Chapter 5: The Golden Path</h2>
+        <div class="book-content" id="bookContent">
+            <p>Paul Atreides stood at the window of his private chamber, looking out over the bustling city of Arrakeen. The twin suns were setting, casting long shadows across the desert landscape. He could feel the weight of prescience pressing against his mind, a thousand possible futures flickering like candle flames in the wind.</p>
+            
+            <p>"The Golden Path," he murmured to himself. The words tasted bitter on his tongue. It was the only way forward, the only future where humanity might survive the coming storm. And yet, the cost was almost too great to bear.</p>
+            
+            <p>A soft knock at the door interrupted his thoughts. "Enter," he called, not turning from the window.</p>
+            
+            <p>Chani slipped into the room, her Fremen robes whispering against the stone floor. "Usul, you've been standing here for hours," she said, using his private name. "The council awaits your decision."</p>
+            
+            <p>Paul closed his eyes, feeling the familiar ache of his visions. He saw the jihad spreading across the universe in his name, the rivers of blood that would flow. And he saw the alternatives—each one worse than the last.</p>
+            
+            <p>"Tell them I will address them tomorrow," he said at last. "I need more time to consider the Tleilaxu proposal."</p>
+            
+            <p>Chani moved to stand beside him, her presence a comfort in the storm of his thoughts. "You cannot carry this burden alone," she said softly.</p>
+            
+            <p>Paul turned to face her, his eyes dark with the knowledge of what was to come. "That's where you're wrong, my Sihaya. This burden is mine alone to bear. The Golden Path demands it."</p>
+            
+            <p>Outside, the first moon rose over the desert, its pale light mingling with the last rays of the setting suns. The sands seemed to shift and whisper, as if they too knew the terrible choice that lay before their Muad'Dib.</p>
+            
+            <p>Paul reached into the pocket of his robe, his fingers brushing against the small, wrapped package the Bene Gesserit had delivered that morning. The contents could change everything—or nothing at all. The weight of decision pressed down on him like the desert heat.</p>
+            
+            <p>"Come," he said to Chani, taking her hand. "Walk with me in the gardens. For this moment at least, let us pretend there is no future, no past. Only now."</p>
+            
+            <p>As they stepped out into the twilight, Paul couldn't shake the feeling that this might be one of the last peaceful moments they would share. The Golden Path stretched before him, narrow and treacherous, and he was the only one who could walk it.</p>
+        </div>
+    </div>
+
+    <!-- Highlight Toolbar -->
+    <div class="highlight-toolbar" id="highlightToolbar">
+        <button class="highlight-btn" id="highlightBtn" title="Highlight">
+            <i class="fas fa-highlighter"></i>
+        </button>
+        <button class="highlight-btn" id="saveBtn" title="Save to Library">
+            <i class="fas fa-bookmark"></i>
+        </button>
+    </div>
+
+    <!-- Highlight Confirmation -->
+    <div class="highlight-confirmation" id="highlightConfirmation">
+        Highlighted!
+    </div>
+
+    <!-- Pomodoro Timer -->
+    <div class="pomodoro-container" id="pomodoroContainer">
+        <div class="pomodoro-header">
+            <div class="pomodoro-title">Focus Timer</div>
+            <button class="pomodoro-close" id="pomodoroClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+        <div class="pomodoro-controls">
+            <button class="pomodoro-btn pomodoro-start" id="pomodoroStart">Start</button>
+            <button class="pomodoro-btn pomodoro-reset" id="pomodoroReset">Reset</button>
+        </div>
+        <div class="pomodoro-presets">
+            <button class="pomodoro-preset active" data-minutes="25">25/5</button>
+            <button class="pomodoro-preset" data-minutes="50">50/10</button>
+            <button class="pomodoro-preset" data-minutes="90">90/15</button>
+        </div>
+    </div>
+
+    <!-- Audio Player -->
+    <div class="audio-player" id="audioPlayer">
+        <i class="fas fa-music"></i>
+        <audio id="backgroundAudio" loop>
+        <source src="assets/audio/ambient.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+        </audio>
+        <div class="volume-control">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+        </div>
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="quick-nav">
+        <a href="#" class="nav-btn">
+            <i class="fas fa-book-open"></i>
+            <span>Reading</span>
+        </a>
+        <a href="audiobook.html" class="nav-btn">
+            <i class="fas fa-headphones"></i>
+            <span>Audiobook</span>
+        </a>
+        <a href="home.html" class="nav-btn">
+            <i class="fas fa-book"></i>
+            <span>Library</span>
+        </a>
+        <a href="discussion.html" class="nav-btn">
+            <i class="fas fa-comments"></i>
+            <span>Discussion</span>
+        </a>
+    </div>
+
+    <!-- Font Awesome & JavaScript -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        // Simulate user preferences (in a real app, these would come from backend/database)
+        const userPreferences = {
+            name: "Farhan",
+            genres: ["sci-fi", "fantasy"],
+            theme: "dark", // can be 'serene', 'vibrant', 'dark', 'nature'
+            color: "purple",
+            mood: "focused",
+            backgroundSound: true,
+            readingProgress: {
+                "dune-messiah": 35
+            }
+        };
+        
+        // Apply theme based on user preferences
+        function applyTheme() {
+            const root = document.documentElement;
+            
+            // Apply theme colors
+            switch(userPreferences.theme) {
+                case 'serene':
+                    root.style.setProperty('--bg-color', '#ffffff');
+                    root.style.setProperty('--reading-bg', '#f8f9fa');
+                    root.style.setProperty('--header-bg', '#ffffff');
+                    root.style.setProperty('--ambient-overlay', 'rgba(106, 13, 173, 0.03)');
+                    break;
+                case 'vibrant':
+                    root.style.setProperty('--bg-color', '#fff8f8');
+                    root.style.setProperty('--reading-bg', '#fff0f0');
+                    root.style.setProperty('--header-bg', '#fff8f8');
+                    root.style.setProperty('--ambient-overlay', 'rgba(255, 69, 0, 0.03)');
+                    break;
+                case 'dark':
+                    root.style.setProperty('--bg-color', '#121212');
+                    root.style.setProperty('--reading-bg', '#1e1e1e');
+                    root.style.setProperty('--header-bg', '#1e1e1e');
+                    root.style.setProperty('--text-color', '#f8f9fa');
+                    root.style.setProperty('--text-light', '#adb5bd');
+                    root.style.setProperty('--ambient-overlay', 'rgba(0, 245, 255, 0.03)');
+                    break;
+                case 'nature':
+                    root.style.setProperty('--bg-color', '#f8fff8');
+                    root.style.setProperty('--reading-bg', '#f0fff0');
+                    root.style.setProperty('--header-bg', '#f8fff8');
+                    root.style.setProperty('--ambient-overlay', 'rgba(0, 128, 0, 0.03)');
+                    break;
+            }
+            
+            // Apply accent color
+            const accentColors = {
+                purple: '#6a0dad',
+                blue: '#2196f3',
+                green: '#4caf50',
+                red: '#f44336',
+                orange: '#ff9800',
+                yellow: '#ffeb3b',
+                dark: '#212121',
+                violet: '#9c27b0',
+                gray: '#607d8b',
+                'dark-green': '#2e7d32',
+                teal: '#00bcd4',
+                brown: '#795548'
+            };
+            
+            if (accentColors[userPreferences.color]) {
+                root.style.setProperty('--primary', accentColors[userPreferences.color]);
+                root.style.setProperty('--primary-dark', shadeColor(accentColors[userPreferences.color], -20));
+                root.style.setProperty('--progress-color', accentColors[userPreferences.color]);
+            }
+            
+            // Apply genre-specific ambient effects
+            if (userPreferences.genres.includes('horror')) {
+                document.querySelector('.ambient-effect').style.background = 'radial-gradient(circle at 20% 50%, rgba(255, 0, 0, 0.03) 0%, transparent 50%)';
+            } else if (userPreferences.genres.includes('romance')) {
+                document.querySelector('.ambient-effect').style.background = 'radial-gradient(circle at 20% 50%, rgba(255, 105, 180, 0.03) 0%, transparent 50%)';
+            }
+        }
+        
+        // Helper function to shade colors
+        function shadeColor(color, percent) {
+            let R = parseInt(color.substring(1,3), 16);
+            let G = parseInt(color.substring(3,5), 16);
+            let B = parseInt(color.substring(5,7), 16);
+
+            R = parseInt(R * (100 + percent) / 100);
+            G = parseInt(G * (100 + percent) / 100);
+            B = parseInt(B * (100 + percent) / 100);
+
+            R = (R<255)?R:255;  
+            G = (G<255)?G:255;  
+            B = (B<255)?B:255;  
+
+            R = Math.round(R);
+            G = Math.round(G);
+            B = Math.round(B);
+
+            const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+            const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+            const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+
+            return "#"+RR+GG+BB;
+        }
+        
+        // Initialize theme
+        applyTheme();
+        
+        // Set reading progress
+        const progressFill = document.getElementById('progressFill');
+        if (userPreferences.readingProgress["dune-messiah"]) {
+            progressFill.style.width = `${userPreferences.readingProgress["dune-messiah"]}%`;
+        }
+        
+        // Highlight functionality
+        const highlightToolbar = document.getElementById('highlightToolbar');
+        const highlightBtn = document.getElementById('highlightBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const highlightConfirmation = document.getElementById('highlightConfirmation');
+        const bookContent = document.getElementById('bookContent');
+        
+        let selectedText = '';
+        
+        bookContent.addEventListener('mouseup', function(e) {
+            const selection = window.getSelection();
+            selectedText = selection.toString().trim();
+            
+            if (selectedText.length > 0) {
+                // Position the toolbar near the selection
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                
+                highlightToolbar.style.display = 'flex';
+                highlightToolbar.style.top = `${rect.top - 50}px`;
+                highlightToolbar.style.left = `${rect.left + rect.width/2 - 50}px`;
+            } else {
+                highlightToolbar.style.display = 'none';
+            }
+        });
+        
+        highlightBtn.addEventListener('click', function() {
+            // In a real app, this would highlight the selected text
+            showHighlightConfirmation();
+            highlightToolbar.style.display = 'none';
+            window.getSelection().removeAllRanges();
+        });
+        
+        saveBtn.addEventListener('click', function() {
+            // In a real app, this would save the selected text to user's library
+            showHighlightConfirmation('Saved to Library!');
+            highlightToolbar.style.display = 'none';
+            window.getSelection().removeAllRanges();
+        });
+        
+        function showHighlightConfirmation(message = 'Highlighted!') {
+            highlightConfirmation.textContent = message;
+            highlightConfirmation.style.opacity = '1';
+            
+            setTimeout(() => {
+                highlightConfirmation.style.opacity = '0';
+            }, 2000);
+        }
+        
+        // Clicking anywhere else hides the highlight toolbar
+        document.addEventListener('mousedown', function(e) {
+            if (!highlightToolbar.contains(e.target)) {
+                highlightToolbar.style.display = 'none';
+            }
+        });
+        
+        // Pomodoro Timer functionality
+        const pomodoroContainer = document.getElementById('pomodoroContainer');
+        const pomodoroClose = document.getElementById('pomodoroClose');
+        const pomodoroTimer = document.getElementById('pomodoroTimer');
+        const pomodoroStart = document.getElementById('pomodoroStart');
+        const pomodoroReset = document.getElementById('pomodoroReset');
+        const pomodoroPresets = document.querySelectorAll('.pomodoro-preset');
+        
+        let timerInterval;
+        let minutes = 25;
+        let seconds = 0;
+        let isRunning = false;
+        
+        function updateTimerDisplay() {
+            const displayMinutes = minutes.toString().padStart(2, '0');
+            const displaySeconds = seconds.toString().padStart(2, '0');
+            pomodoroTimer.textContent = `${displayMinutes}:${displaySeconds}`;
+        }
+        
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                pomodoroStart.textContent = 'Pause';
+                
+                timerInterval = setInterval(() => {
+                    if (seconds === 0) {
+                        if (minutes === 0) {
+                            // Timer complete
+                            clearInterval(timerInterval);
+                            isRunning = false;
+                            pomodoroStart.textContent = 'Start';
+                            showTimerCompleteNotification();
+                            return;
+                        }
+                        minutes--;
+                        seconds = 59;
+                    } else {
+                        seconds--;
+                    }
+                    
+                    updateTimerDisplay();
+                }, 1000);
+            } else {
+                // Pause timer
+                clearInterval(timerInterval);
+                isRunning = false;
+                pomodoroStart.textContent = 'Start';
+            }
+        }
+        
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            pomodoroStart.textContent = 'Start';
+            
+            // Reset to current preset
+            const activePreset = document.querySelector('.pomodoro-preset.active');
+            minutes = parseInt(activePreset.dataset.minutes);
+            seconds = 0;
+            
+            updateTimerDisplay();
+        }
+        
+        function showTimerCompleteNotification() {
+            // In a real app, this would show a more prominent notification
+            highlightConfirmation.textContent = 'Timer complete! Take a break.';
+            highlightConfirmation.style.opacity = '1';
+            
+            setTimeout(() => {
+                highlightConfirmation.style.opacity = '0';
+            }, 3000);
+        }
+        
+        pomodoroStart.addEventListener('click', startTimer);
+        pomodoroReset.addEventListener('click', resetTimer);
+        
+        pomodoroPresets.forEach(preset => {
+            preset.addEventListener('click', function() {
+                pomodoroPresets.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                resetTimer();
+            });
+        });
+        
+        pomodoroClose.addEventListener('click', function() {
+            pomodoroContainer.style.opacity = '0';
+            pomodoroContainer.style.pointerEvents = 'none';
+            setTimeout(() => {
+                pomodoroContainer.style.display = 'none';
+            }, 300);
+        });
+        
+        // Audio player functionality
+        const audioPlayer = document.getElementById('audioPlayer');
+        const volumeSlider = document.getElementById('volumeSlider');
+        let audioPlaying = false;
+        const backgroundAudio = document.getElementById('backgroundAudio');
+
+        // Auto-play jika userPreference nyalakan backgroundSound
+        if (userPreferences.backgroundSound) {
+            backgroundAudio.volume = 0.5; // default volume
+            backgroundAudio.play().then(() => {
+                audioPlaying = true;
+                audioPlayer.innerHTML = '<i class="fas fa-pause"></i>';
+            }).catch(e => {
+                console.log("Autoplay diblokir oleh browser:", e);
+            });
+        }
+
+        // Klik tombol audio
+        audioPlayer.addEventListener('click', function () {
+            if (audioPlaying) {
+                backgroundAudio.pause();
+                audioPlayer.innerHTML = '<i class="fas fa-music"></i>';
+            } else {
+                backgroundAudio.play();
+                audioPlayer.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            audioPlaying = !audioPlaying;
+        });
+
+        // Slider volume
+        volumeSlider.addEventListener('input', function () {
+            backgroundAudio.volume = this.value / 100;
+        });
+
+        audioPlayer.addEventListener('click', function() {
+            audioPlaying = !audioPlaying;
+            audioPlayer.innerHTML = audioPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-music"></i>';
+            
+        });
+        
+        // Progress bar click to navigate
+        const progressBar = document.getElementById('progressBar');
+        
+        progressBar.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const clickPosition = e.clientX - rect.left;
+            const percentage = (clickPosition / rect.width) * 100;
+            
+            // In a real app, this would navigate to that position in the book
+            progressFill.style.width = `${percentage}%`;
+            console.log(`Navigated to ${Math.round(percentage)}% of book`);
+        });
+    </script>
+</body>
+</html>
